@@ -43,12 +43,12 @@ namespace SFRM.Ticket.Entradas.Helpers
             string deviceInfo =
               @"<DeviceInfo>
                 <OutputFormat>EMF</OutputFormat>
-                <PageWidth>8.5in</PageWidth>
-                <PageHeight>11in</PageHeight>
-                <MarginTop>0.25in</MarginTop>
-                <MarginLeft>0.25in</MarginLeft>
-                <MarginRight>0.25in</MarginRight>
-                <MarginBottom>0.25in</MarginBottom>
+                <PageWidth>5.98425</PageWidth>
+                <PageHeight>2.75591</PageHeight>
+                <MarginTop>0.00in</MarginTop>
+                <MarginLeft>0.00in</MarginLeft>
+                <MarginRight>0.00in</MarginRight>
+                <MarginBottom>0.00in</MarginBottom>
             </DeviceInfo>";
             Warning[] warnings;
             m_streams = new List<Stream>();
@@ -62,19 +62,23 @@ namespace SFRM.Ticket.Entradas.Helpers
         {
             Metafile pageImage = new
                Metafile(m_streams[m_currentPageIndex]);
-
+            ev.Graphics.PageUnit = GraphicsUnit.Millimeter;
             // Adjust rectangular area with printer margins.
-            Rectangle adjustedRect = new Rectangle(
-                ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
-                ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
-                ev.PageBounds.Width,
-                ev.PageBounds.Height);
+            //Rectangle adjustedRect = new Rectangle(
+            //    ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
+            //    ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
+            //    ev.PageBounds.Width,
+            //    ev.PageBounds.Height);
 
+            Rectangle adjustedRect = new Rectangle(-152, 0, 152, 70);                
+
+            ev.Graphics.RotateTransform(270);
             // Draw a white background for the report
-            ev.Graphics.FillRectangle(Brushes.White, adjustedRect);
+            //ev.Graphics.FillRectangle(Brushes.Khaki, adjustedRect);
 
             // Draw the report content
             ev.Graphics.DrawImage(pageImage, adjustedRect);
+            //ev.Graphics.DrawImage(pageImage, -ev.PageBounds.Height, ev.PageBounds.Left);
 
             // Prepare for the next page. Make sure we haven't hit the end.
             m_currentPageIndex++;
