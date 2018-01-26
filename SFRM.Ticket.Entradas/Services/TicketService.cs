@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using MySql.Data.MySqlClient;
 using SFRM.Ticket.Entradas.Helpers;
 using SFRM.Ticket.Entradas.Models;
@@ -48,7 +49,7 @@ namespace SFRM.Ticket.Entradas.Services
                     try
                     {
                         var sql =
-                            @"SELECT t.tickets_id AS TicketNro, s.season_name AS Temporada, e.event_name AS Evento, e.event_date AS Fecha, z.zone_name AS Zona, t.ticket_row AS Fila, t.ticket_seat_id AS Asiento, t.ticket_price AS Precio, tt.ticket_type_name AS Tipo, t.ticket_qr AS CodigoQr FROM tickets AS t " +
+                            @"SELECT t.tickets_id AS TicketNro, s.season_name AS Temporada, e.event_name AS Evento, e.event_date AS Fecha, e.event_jornada AS Jornada, e.event_hora AS Hora, z.zone_name AS Zona, z.zone_puerta AS Puerta, t.ticket_row AS Fila, t.ticket_seat_id AS Asiento, t.ticket_price AS Precio, tt.ticket_type_name AS Tipo, t.ticket_qr AS CodigoQr FROM tickets AS t " +
                             @"INNER JOIN `events` AS e ON e.event_id = t.ticket_event_id " +
                             @"INNER JOIN seasons AS s ON s.season_id = e.event_season_id " +
                             @"INNER JOIN zones AS z ON z.zone_id = t.ticket_zone_id " +
@@ -74,7 +75,7 @@ namespace SFRM.Ticket.Entradas.Services
                                 }
                                 catch (Exception)
                                 {
-                                    // Nothing                                    
+                                    // Nathing
                                 }
                             }                            
                         }                        

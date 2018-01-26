@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Deployment.Application;
+using System.Reflection;
+using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using Microsoft.Win32;
+using SFRM.Ticket.ClickOnce;
 using SFRM.Ticket.Entradas.Services;
 
 namespace SFRM.Ticket.Entradas
@@ -12,8 +16,19 @@ namespace SFRM.Ticket.Entradas
 
         public TicketApplication()
         {
+            var clickOnce = new ClickOnceHelper(Globals.PublisherName, Globals.ProductName);
+            clickOnce.UpdateUninstallParameters();
+            RegisterStartup(clickOnce.ProductName);
             _ticketService.InitializeConfiguration();
             InitializeTicketTimer();
+        }
+
+        public void RegisterStartup(string productName)
+        {
+            if (!ApplicationDeployment.IsNetworkDeployed)
+                return;
+            RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
+            reg.SetValue(productName, Assembly.GetExecutingAssembly().Location);
         }
 
 

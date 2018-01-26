@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Drawing;
+﻿using System.Drawing;
 using SFRM.Ticket.Entradas.Models;
 
 namespace SFRM.Ticket.Entradas.Helpers
@@ -19,14 +18,6 @@ namespace SFRM.Ticket.Entradas.Helpers
         private int m_currentPageIndex;
         private IList<Stream> m_streams;
 
-        private DataTable LoadData()
-        {
-            // Create a new DataSet and read sales data file 
-            //    data.xml into the first DataTable.
-            DataSet dataSet = new DataSet();
-            dataSet.ReadXml(@"..\..\data.xml");
-            return dataSet.Tables[0];
-        }
         // Routine to provide to the report renderer, in order to
         //    save an image for each page of the report.
         private Stream CreateStream(string name,
@@ -52,8 +43,15 @@ namespace SFRM.Ticket.Entradas.Helpers
             </DeviceInfo>";
             Warning[] warnings;
             m_streams = new List<Stream>();
-            report.Render("Image", deviceInfo, CreateStream,
-               out warnings);
+            try
+            {
+                report.Render("Image", deviceInfo, CreateStream,
+                    out warnings);
+            }
+            catch (Exception)
+            {
+                // Nothing
+            }
             foreach (Stream stream in m_streams)
                 stream.Position = 0;
         }
@@ -104,9 +102,9 @@ namespace SFRM.Ticket.Entradas.Helpers
         // Create a local report for Report.rdlc, load the data,
         //    export the report to an .emf file, and print it.
         public void Init(Entrada data)
-        {
+        {            
             LocalReport report = new LocalReport();
-            report.ReportPath = @"..\..\TicketEntrada.rdlc";
+            report.ReportPath = @".\TicketEntrada.rdlc";
             IEnumerable<Entrada> info = new List<Entrada> {data};
             report.DataSources.Add(
                new ReportDataSource("DataSet1", info));
