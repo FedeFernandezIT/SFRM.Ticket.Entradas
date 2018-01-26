@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using SFRM.Ticket.Entradas.Models;
+using SFRM.Ticket.Entradas.Properties;
 
 namespace SFRM.Ticket.Entradas.Helpers
 {
@@ -48,9 +49,9 @@ namespace SFRM.Ticket.Entradas.Helpers
                 report.Render("Image", deviceInfo, CreateStream,
                     out warnings);
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                // Nothing
+                //MessageBox.Show("Error in Render: " + ex.InnerException?.Message ?? ex.Message);
             }
             foreach (Stream stream in m_streams)
                 stream.Position = 0;
@@ -61,22 +62,14 @@ namespace SFRM.Ticket.Entradas.Helpers
             Metafile pageImage = new
                Metafile(m_streams[m_currentPageIndex]);
             ev.Graphics.PageUnit = GraphicsUnit.Millimeter;
-            // Adjust rectangular area with printer margins.
-            //Rectangle adjustedRect = new Rectangle(
-            //    ev.PageBounds.Left - (int)ev.PageSettings.HardMarginX,
-            //    ev.PageBounds.Top - (int)ev.PageSettings.HardMarginY,
-            //    ev.PageBounds.Width,
-            //    ev.PageBounds.Height);
+            
 
             Rectangle adjustedRect = new Rectangle(-152, 0, 152, 70);                
 
-            ev.Graphics.RotateTransform(270);
-            // Draw a white background for the report
-            //ev.Graphics.FillRectangle(Brushes.Khaki, adjustedRect);
+            ev.Graphics.RotateTransform(270);            
 
             // Draw the report content
-            ev.Graphics.DrawImage(pageImage, adjustedRect);
-            //ev.Graphics.DrawImage(pageImage, -ev.PageBounds.Height, ev.PageBounds.Left);
+            ev.Graphics.DrawImage(pageImage, adjustedRect);            
 
             // Prepare for the next page. Make sure we haven't hit the end.
             m_currentPageIndex++;
@@ -90,6 +83,7 @@ namespace SFRM.Ticket.Entradas.Helpers
             PrintDocument printDoc = new PrintDocument();
             if (!printDoc.PrinterSettings.IsValid)
             {
+                //MessageBox.Show("Error: cannot find the default printer.");
                 throw new Exception("Error: cannot find the default printer.");
             }
             else
@@ -103,8 +97,9 @@ namespace SFRM.Ticket.Entradas.Helpers
         //    export the report to an .emf file, and print it.
         public void Init(Entrada data)
         {            
-            LocalReport report = new LocalReport();
-            report.ReportPath = @".\TicketEntrada.rdlc";
+            LocalReport report = new LocalReport();            
+            TextReader reader = new StringReader(Resources.TicketEntrada);
+            report.LoadReportDefinition(reader);
             IEnumerable<Entrada> info = new List<Entrada> {data};
             report.DataSources.Add(
                new ReportDataSource("DataSet1", info));

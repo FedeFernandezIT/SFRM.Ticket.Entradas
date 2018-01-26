@@ -76,6 +76,7 @@ namespace SFRM.Ticket.Entradas.Services
                                 catch (Exception)
                                 {
                                     // Nathing
+                                    //MessageBox.Show("Level3");
                                 }
                             }                            
                         }                        
@@ -83,11 +84,13 @@ namespace SFRM.Ticket.Entradas.Services
                     catch(Exception)
                     {
                         // Nothing
+                        //MessageBox.Show("Level2");
                     }
                 }
             }
             catch (Exception)
             {
+                //MessageBox.Show("Level1");
                 Task.Delay(500).Wait();
             }            
         }

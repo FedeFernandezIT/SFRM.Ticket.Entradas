@@ -1,8 +1,10 @@
-﻿using System.Deployment.Application;
+﻿using System;
+using System.Deployment.Application;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Timers;
 using System.Windows.Forms;
+using IWshRuntimeLibrary;
 using Microsoft.Win32;
 using SFRM.Ticket.ClickOnce;
 using SFRM.Ticket.Entradas.Services;
@@ -27,11 +29,13 @@ namespace SFRM.Ticket.Entradas
         {
             if (!ApplicationDeployment.IsNetworkDeployed)
                 return;
+
+            // Regedit
             RegistryKey reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run", true);
-            reg.SetValue(productName, Assembly.GetExecutingAssembly().Location);
+            reg.SetValue(productName, Assembly.GetExecutingAssembly().Location);            
         }
 
-
+        
         private void InitializeTicketTimer()
         {            
             _ticketPrinterTimer = new System.Timers.Timer(500);

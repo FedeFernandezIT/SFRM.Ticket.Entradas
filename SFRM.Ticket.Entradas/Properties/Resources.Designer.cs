@@ -89,5 +89,26 @@ namespace SFRM.Ticket.Entradas.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;
+        ///&lt;Report xmlns=&quot;http://schemas.microsoft.com/sqlserver/reporting/2008/01/reportdefinition&quot; xmlns:rd=&quot;http://schemas.microsoft.com/SQLServer/reporting/reportdesigner&quot;&gt;
+        ///  &lt;Body&gt;
+        ///    &lt;ReportItems&gt;
+        ///      &lt;Textbox Name=&quot;Textbox1&quot;&gt;
+        ///        &lt;CanGrow&gt;true&lt;/CanGrow&gt;
+        ///        &lt;KeepTogether&gt;true&lt;/KeepTogether&gt;
+        ///        &lt;Paragraphs&gt;
+        ///          &lt;Paragraph&gt;
+        ///            &lt;TextRuns&gt;
+        ///              &lt;TextRun&gt;
+        ///                &lt;Value&gt;=First(Fields!Tipo.Value, &quot;DataSet1&quot;)&lt;/Value&gt;
+        ///    [resto de la cadena truncado]&quot;;.
+        /// </summary>
+        internal static string TicketEntrada {
+            get {
+                return ResourceManager.GetString("TicketEntrada", resourceCulture);
+            }
+        }
     }
 }
